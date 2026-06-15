@@ -46,7 +46,7 @@ public class ProductController {
         Product product = productService.getProductById(productId);
 
         if(product == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();//獎responseEntity 傳給前端
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();//將responseEntity 傳給前端
         }
         //修改商品的數據
         productService.updateProduct(productId, productRequest);
@@ -55,5 +55,13 @@ public class ProductController {
 
         return ResponseEntity.status(HttpStatus.OK).body(updatedProduct);
 
+    }
+
+    @DeleteMapping("/products/{productId}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Integer productId) {
+        productService.deleteProductById(productId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); //告訴前端刪除的東西已經不存在
+        //前端只是要一個結果
     }
 }
