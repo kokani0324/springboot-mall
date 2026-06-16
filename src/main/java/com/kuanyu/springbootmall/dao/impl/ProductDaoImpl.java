@@ -42,6 +42,8 @@ public class ProductDaoImpl implements ProductDao {
             sql = sql + " AND product_name LIKE :search";
             map.put("search", "%" + productQueryParms.getSearch() + "%");
         }
+        //依某某欄位做排序
+        sql = sql + " ORDER BY " + productQueryParms.getOrderBy() + " " + productQueryParms.getSort();
 
         //用 namedParameterJdbcTemplate 執行 SQL，查資料庫，然後把結果轉成 List<Product>
         List<Product> productList = namedParameterJdbcTemplate.query(sql,map,new ProductRowMapper());

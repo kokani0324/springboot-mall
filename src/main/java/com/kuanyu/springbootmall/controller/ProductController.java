@@ -26,13 +26,20 @@ public class ProductController {
     @GetMapping("/products")
     public ResponseEntity<List<Product>> getProducts(
             //required = false category是一個可選的參數
+            //@RequestParam 取得URL的參數
+            //查詢條件 Filtering
            @RequestParam(required = false) ProductCategory category,
-            @RequestParam(required = false) String search
+            @RequestParam(required = false) String search,
+            //排序 Sorting
+            @RequestParam(defaultValue = "created_date") String orderBy,
+            @RequestParam(defaultValue = "desc") String sort
     ) {
 
         ProductQueryParms productQueryParms = new ProductQueryParms();
         productQueryParms.setCategory(category);
         productQueryParms.setSearch(search);
+        productQueryParms.setOrderBy(orderBy);
+        productQueryParms.setSort(sort);
 
        List<Product> productList = productService.getProducts(productQueryParms);
 
