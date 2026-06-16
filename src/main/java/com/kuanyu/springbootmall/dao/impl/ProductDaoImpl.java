@@ -1,13 +1,12 @@
 package com.kuanyu.springbootmall.dao.impl;
 
 import com.kuanyu.springbootmall.dao.ProductDao;
+import com.kuanyu.springbootmall.dto.ProductQueryParms;
 import com.kuanyu.springbootmall.dto.ProductRequest;
 import com.kuanyu.springbootmall.model.Product;
 import com.kuanyu.springbootmall.rowmapper.ProductRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
-
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -25,12 +24,24 @@ public class ProductDaoImpl implements ProductDao {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate ;
 
     @Override
-    public List<Product> getProducts() {
+    public List<Product> getProducts(ProductQueryParms productQueryParms) {
         String sql = "select product_id,product_name, category, image_url, price, stock, description, " +
                 "created_date, last_modified_date " +
-                "FROM product";
+                "FROM product where 1=1";
 
         Map<String, Object> map = new HashMap<>();
+        //WHERE 1=1 AND category = :category，如果是null 就會維持1=1
+        //bj
+        if(productQueryParms.getCategory() != null) {
+            sql = sql + " AND category = :category"; //AND 前面要記得預留空白鍵
+            map.put("category", productQueryParms.getCategory().name());
+        }
+
+        //LIKE 是模糊查詢的意思
+        if(productQueryParms.getSearch() != null) {
+            sql = sql + " AND product_name LIKE :search";
+            map.put("search", "%" + productQueryParms.getSearch() + "%");
+        }
 
         //用 namedParameterJdbcTemplate 執行 SQL，查資料庫，然後把結果轉成 List<Product>
         List<Product> productList = namedParameterJdbcTemplate.query(sql,map,new ProductRowMapper());

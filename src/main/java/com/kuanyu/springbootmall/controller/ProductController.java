@@ -1,5 +1,7 @@
 package com.kuanyu.springbootmall.controller;
 
+import com.kuanyu.springbootmall.contstant.ProductCategory;
+import com.kuanyu.springbootmall.dto.ProductQueryParms;
 import com.kuanyu.springbootmall.dto.ProductRequest;
 import com.kuanyu.springbootmall.model.Product;
 import com.kuanyu.springbootmall.service.ProductService;
@@ -22,9 +24,17 @@ public class ProductController {
 
     //查詢商品類別實作
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProducts() {
+    public ResponseEntity<List<Product>> getProducts(
+            //required = false category是一個可選的參數
+           @RequestParam(required = false) ProductCategory category,
+            @RequestParam(required = false) String search
+    ) {
 
-       List<Product> productList = productService.getProducts();
+        ProductQueryParms productQueryParms = new ProductQueryParms();
+        productQueryParms.setCategory(category);
+        productQueryParms.setSearch(search);
+
+       List<Product> productList = productService.getProducts(productQueryParms);
 
        return ResponseEntity.status(HttpStatus.OK).body(productList);
 

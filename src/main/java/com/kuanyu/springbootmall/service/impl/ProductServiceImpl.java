@@ -1,6 +1,7 @@
 package com.kuanyu.springbootmall.service.impl;
 
 import com.kuanyu.springbootmall.dao.ProductDao;
+import com.kuanyu.springbootmall.dto.ProductQueryParms;
 import com.kuanyu.springbootmall.dto.ProductRequest;
 import com.kuanyu.springbootmall.model.Product;
 import com.kuanyu.springbootmall.service.ProductService;
@@ -16,8 +17,8 @@ public class ProductServiceImpl  implements ProductService {
     private ProductDao productDao ;
 
     @Override
-    public List<Product> getProducts() {
-        return productDao.getProducts();
+    public List<Product> getProducts(ProductQueryParms productQueryParms) {
+        return productDao.getProducts(productQueryParms);
     }
 
     @Override
