@@ -31,16 +31,7 @@ public class ProductDaoImpl implements ProductDao {
         //WHERE 1=1 AND category = :category，如果是null 就會維持1=1
         //bj
         //查詢條件
-        if(productQueryParms.getCategory() != null) {
-            sql = sql + " AND category = :category"; //AND 前面要記得預留空白鍵
-            map.put("category", productQueryParms.getCategory().name());
-        }
-
-        //LIKE 是模糊查詢的意思
-        if(productQueryParms.getSearch() != null) {
-            sql = sql + " AND product_name LIKE :search";
-            map.put("search", "%" + productQueryParms.getSearch() + "%");
-        }
+        sql = addFilteringSql(sql, map, productQueryParms);
 
         //取得傳出來的count的值
         //queryForObject的方法可以將count的值轉成Integer total
@@ -60,16 +51,8 @@ public class ProductDaoImpl implements ProductDao {
         //WHERE 1=1 AND category = :category，如果是null 就會維持1=1
         //bj
         //查詢條件
-        if(productQueryParms.getCategory() != null) {
-            sql = sql + " AND category = :category"; //AND 前面要記得預留空白鍵
-            map.put("category", productQueryParms.getCategory().name());
-        }
+        sql = addFilteringSql(sql, map, productQueryParms);
 
-        //LIKE 是模糊查詢的意思
-        if(productQueryParms.getSearch() != null) {
-            sql = sql + " AND product_name LIKE :search";
-            map.put("search", "%" + productQueryParms.getSearch() + "%");
-        }
         //依某某欄位做排序
         sql = sql + " ORDER BY " + productQueryParms.getOrderBy() + " " + productQueryParms.getSort();
         //分頁
@@ -161,5 +144,20 @@ public class ProductDaoImpl implements ProductDao {
         map.put("productId", productId);
 
         namedParameterJdbcTemplate.update(sql, map);
+    }
+
+    private String addFilteringSql(String sql, Map<String, Object> map ,ProductQueryParms productQueryParms) {
+        //查詢條件
+        if(productQueryParms.getCategory() != null) {
+            sql = sql + " AND category = :category"; //AND 前面要記得預留空白鍵
+            map.put("category", productQueryParms.getCategory().name());
+        }
+
+        //LIKE 是模糊查詢的意思
+        if(productQueryParms.getSearch() != null) {
+            sql = sql + " AND product_name LIKE :search";
+            map.put("search", "%" + productQueryParms.getSearch() + "%");
+        }
+        return sql;
     }
 }
