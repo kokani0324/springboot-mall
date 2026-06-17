@@ -7,13 +7,17 @@ import com.kuanyu.springbootmall.model.Product;
 import com.kuanyu.springbootmall.service.ProductService;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Validated
 @RestController  //這個 class 裡的方法回傳的物件，
 // 不是拿去找 JSP 頁面，而是直接轉成 HTTP response body，通常是 JSON。
 
@@ -32,7 +36,10 @@ public class ProductController {
             @RequestParam(required = false) String search,
             //排序 Sorting
             @RequestParam(defaultValue = "created_date") String orderBy,
-            @RequestParam(defaultValue = "desc") String sort
+            @RequestParam(defaultValue = "desc") String sort,
+            //分頁 Pagination
+            @RequestParam(defaultValue = "5") @Max(1000) @Min(0) Integer limit,
+            @RequestParam(defaultValue = "0") @Min(0) Integer offset
     ) {
 
         ProductQueryParms productQueryParms = new ProductQueryParms();
@@ -40,6 +47,9 @@ public class ProductController {
         productQueryParms.setSearch(search);
         productQueryParms.setOrderBy(orderBy);
         productQueryParms.setSort(sort);
+        productQueryParms.setLimit(limit);
+        productQueryParms.setOffset(offset);
+
 
        List<Product> productList = productService.getProducts(productQueryParms);
 

@@ -32,6 +32,7 @@ public class ProductDaoImpl implements ProductDao {
         Map<String, Object> map = new HashMap<>();
         //WHERE 1=1 AND category = :category，如果是null 就會維持1=1
         //bj
+        //查詢條件
         if(productQueryParms.getCategory() != null) {
             sql = sql + " AND category = :category"; //AND 前面要記得預留空白鍵
             map.put("category", productQueryParms.getCategory().name());
@@ -44,6 +45,11 @@ public class ProductDaoImpl implements ProductDao {
         }
         //依某某欄位做排序
         sql = sql + " ORDER BY " + productQueryParms.getOrderBy() + " " + productQueryParms.getSort();
+        //分頁
+        sql = sql + " LIMIT :limit OFFSET :offset";
+        map.put("limit", productQueryParms.getLimit());
+        map.put("offset", productQueryParms.getOffset());
+
 
         //用 namedParameterJdbcTemplate 執行 SQL，查資料庫，然後把結果轉成 List<Product>
         List<Product> productList = namedParameterJdbcTemplate.query(sql,map,new ProductRowMapper());
