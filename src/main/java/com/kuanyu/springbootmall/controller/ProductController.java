@@ -6,6 +6,7 @@ import com.kuanyu.springbootmall.dto.ProductRequest;
 import com.kuanyu.springbootmall.model.Product;
 import com.kuanyu.springbootmall.service.ProductService;
 
+import com.kuanyu.springbootmall.util.Page;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -28,7 +29,7 @@ public class ProductController {
 
     //查詢商品類別實作
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProducts(
+    public ResponseEntity<Page<Product>> getProducts(
             //required = false category是一個可選的參數
             //@RequestParam 取得URL的參數
             //查詢條件 Filtering
@@ -50,10 +51,20 @@ public class ProductController {
         productQueryParms.setLimit(limit);
         productQueryParms.setOffset(offset);
 
-
+        //取得product list
        List<Product> productList = productService.getProducts(productQueryParms);
+        //取得 product count
+       Integer total = productService.countProduct(productQueryParms);
+        //分頁
+       Page<Product> page = new Page<>();
 
-       return ResponseEntity.status(HttpStatus.OK).body(productList);
+       page.setLimit(limit);
+       page.setOffset(offset);
+       page.setTotal(total);
+       page.setResults(productList);
+
+
+       return ResponseEntity.status(HttpStatus.OK).body(page);
 
     }
 
