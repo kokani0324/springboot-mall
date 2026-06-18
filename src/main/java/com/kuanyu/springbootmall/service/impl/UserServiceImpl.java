@@ -20,6 +20,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Integer register(UserRegisterRequest userRegisterRequest) {
-        return userDao.createUser(userRegisterRequest);
+        return userDao.createUsers(userRegisterRequest);
     }
 }
