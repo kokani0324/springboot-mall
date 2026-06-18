@@ -54,7 +54,7 @@ public class ProductController {
         //取得product list
        List<Product> productList = productService.getProducts(productQueryParms);
         //取得 product count
-       Integer total = productService.countProduct(productQueryParms);
+       Integer total = productService.countProducts(productQueryParms);
         //分頁
        Page<Product> page = new Page<>();
 
