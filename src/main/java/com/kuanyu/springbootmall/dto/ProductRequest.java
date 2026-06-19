@@ -1,6 +1,6 @@
 package com.kuanyu.springbootmall.dto;
 
-import com.kuanyu.springbootmall.contstant.ProductCategory;
+import com.kuanyu.springbootmall.constant.ProductCategory;
 import jakarta.validation.constraints.NotNull;
 
 

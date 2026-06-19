@@ -1,4 +1,4 @@
-package com.kuanyu.springbootmall.contstant;
+package com.kuanyu.springbootmall.constant;
 
 public class MyTest {
 

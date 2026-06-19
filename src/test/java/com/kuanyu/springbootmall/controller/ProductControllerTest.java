@@ -1,6 +1,6 @@
 package com.kuanyu.springbootmall.controller;
 
-import com.kuanyu.springbootmall.contstant.ProductCategory;
+import com.kuanyu.springbootmall.constant.ProductCategory;
 import com.kuanyu.springbootmall.dto.ProductRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package com.kuanyu.springbootmall.rowmapper;
 
-import com.kuanyu.springbootmall.contstant.ProductCategory;
+import com.kuanyu.springbootmall.constant.ProductCategory;
 import com.kuanyu.springbootmall.model.Product;
 import org.springframework.jdbc.core.RowMapper;
 

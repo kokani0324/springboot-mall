@@ -1,6 +1,6 @@
 package com.kuanyu.springbootmall.model;
 
-import com.kuanyu.springbootmall.contstant.ProductCategory;
+import com.kuanyu.springbootmall.constant.ProductCategory;
 
 import java.util.Date;
 
