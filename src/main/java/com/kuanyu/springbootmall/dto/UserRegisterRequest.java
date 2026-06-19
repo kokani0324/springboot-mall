@@ -1,11 +1,13 @@
 package com.kuanyu.springbootmall.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 public class UserRegisterRequest {
 
     //接受前端傳來的帳號密碼
     @NotBlank
+    @Email
     private String email ;
     @NotBlank
     private String password ;
