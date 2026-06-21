@@ -1,11 +1,13 @@
 package com.kuanyu.springbootmall.dao.impl;
 
 import com.kuanyu.springbootmall.dao.OrderDao;
+import com.kuanyu.springbootmall.dto.OrderQueryParms;
 import com.kuanyu.springbootmall.model.Order;
 import com.kuanyu.springbootmall.model.OrderItem;
 import com.kuanyu.springbootmall.rowmapper.OrderItemRowMapper;
 import com.kuanyu.springbootmall.rowmapper.OrderRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.autoconfigure.ApplicationDataSourceScriptDatabaseInitializer;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -22,6 +24,42 @@ public class OrderDaoImpl implements OrderDao {
 
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+   
+
+    @Override
+    public Integer countOrders(OrderQueryParms orderQueryParms) {
+        String sql = "select count(*) from `order` where 1=1";
+
+        Map<String, Object> map = new HashMap<>();
+
+        //查詢條件
+        sql = addFilteringSql(sql, map , orderQueryParms);
+
+        Integer total = namedParameterJdbcTemplate.queryForObject(sql, map, Integer.class);
+
+        return total;
+    }
+
+    @Override
+    public List<Order> getOrders(OrderQueryParms orderQueryParms) {
+        String sql = "select order_id, user_id, total_amount, created_date, last_modified_date from `order` where 1=1";
+
+        Map<String, Object> map = new HashMap<>();
+
+        //查詢條件
+        sql = addFilteringSql(sql, map , orderQueryParms);
+
+        //排序
+        sql = sql + " ORDER BY created_date DESC";
+
+        //分頁
+        sql = sql + " LIMIT :limit OFFSET :offset";
+        map.put("limit", orderQueryParms.getLimit());
+        map.put("offset", orderQueryParms.getOffset());
+        List<Order> orderList = namedParameterJdbcTemplate.query(sql, map, new OrderRowMapper());
+
+        return orderList;
+    }
 
     @Override
     public Integer createOrder(Integer userId, Integer totalAmount) {
@@ -109,4 +147,13 @@ public class OrderDaoImpl implements OrderDao {
 
         return orderItemList;
     }
+
+   private String addFilteringSql(String sql, Map<String, Object> map , OrderQueryParms orderQueryParms) {
+        if(orderQueryParms.getUserId() != null) {
+            sql = sql + " AND user_id = :userId";
+            map.put("userId", orderQueryParms.getUserId());
+        }
+        return sql;
+
+   }
 }
