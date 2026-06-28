@@ -24,7 +24,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-   
+
 
     @Override
     public Integer countOrders(OrderQueryParms orderQueryParms) {
